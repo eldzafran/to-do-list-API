@@ -3,23 +3,30 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\PublicTaskController;
 use App\Http\Controllers\TaskController;
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+
+// Auth (guest)
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
-// Guest endpoint (tanpa auth)
+// Guest / Public endpoint (tanpa auth)
 Route::get('/public/tasks', [PublicTaskController::class, 'index']);
 
 Route::middleware('auth:sanctum')->group(function () {
+    // Auth (butuh token)
     Route::post('/logout', [AuthController::class, 'logout']);
 
     Route::get('/user', function (Request $request) {
-        return $request->user();
+        return response()->json([
+            'message' => 'Authenticated user',
+            'success' => true,
+            'data'    => new UserResource($request->user()),
+        ]);
     });
 
-    // Task endpoints (hanya untuk user login)
     Route::get('/tasks', [TaskController::class, 'index']);
     Route::post('/tasks', [TaskController::class, 'store']);
     Route::get('/tasks/{id}', [TaskController::class, 'show']);

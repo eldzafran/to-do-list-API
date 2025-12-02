@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
+    // GET /api/tasks?status=pending/done
     public function index(Request $request): JsonResponse
     {
         $query = Task::where('user_id', $request->user()->id);
@@ -19,23 +20,28 @@ class TaskController extends Controller
             $query->where('status', $status);
         }
 
-        $tasks = $query->orderByDesc('created_at')->get();
+        // PAGINATION 10 per halaman
+        $tasks = $query->orderByDesc('created_at')->paginate(10);
 
         return response()->json([
             'message' => 'List tasks',
             'success' => true,
             'data'    => TaskResource::collection($tasks),
+            'meta'    => [
+                'current_page' => $tasks->currentPage(),
+                'last_page'    => $tasks->lastPage(),
+                'per_page'     => $tasks->perPage(),
+                'total'        => $tasks->total(),
+            ],
         ]);
     }
 
+    // POST /api/tasks
     public function store(StoreTaskRequest $request): JsonResponse
     {
         $data = $request->validated();
         $data['user_id'] = $request->user()->id;
-
-        if (! isset($data['status'])) {
-            $data['status'] = 'pending';
-        }
+        $data['status'] ??= 'pending';
 
         $task = Task::create($data);
 
@@ -46,10 +52,10 @@ class TaskController extends Controller
         ], 201);
     }
 
+    // GET /api/tasks/{id}
     public function show(Request $request, int $id): JsonResponse
     {
-        $task = Task::where('user_id', $request->user()->id)
-            ->findOrFail($id);
+        $task = Task::where('user_id', $request->user()->id)->findOrFail($id);
 
         return response()->json([
             'message' => 'Task detail',
@@ -58,12 +64,13 @@ class TaskController extends Controller
         ]);
     }
 
+    // PUT/PATCH /api/tasks/{id}
     public function update(UpdateTaskRequest $request, int $id): JsonResponse
     {
-        $task = Task::where('user_id', $request->user()->id)
-            ->findOrFail($id);
+        $task = Task::where('user_id', $request->user()->id)->findOrFail($id);
 
-        $task->update($request->validated());
+        $data = $request->validated();
+        $task->update($data);
 
         return response()->json([
             'message' => 'Task updated',
@@ -72,11 +79,10 @@ class TaskController extends Controller
         ]);
     }
 
+    // DELETE /api/tasks/{id}
     public function destroy(Request $request, int $id): JsonResponse
     {
-        $task = Task::where('user_id', $request->user()->id)
-            ->findOrFail($id);
-
+        $task = Task::where('user_id', $request->user()->id)->findOrFail($id);
         $task->delete();
 
         return response()->json([
@@ -86,11 +92,10 @@ class TaskController extends Controller
         ]);
     }
 
+    // PATCH /api/tasks/{id}/done
     public function markDone(Request $request, int $id): JsonResponse
     {
-        $task = Task::where('user_id', $request->user()->id)
-            ->findOrFail($id);
-
+        $task = Task::where('user_id', $request->user()->id)->findOrFail($id);
         $task->status = 'done';
         $task->save();
 
