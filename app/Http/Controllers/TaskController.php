@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\MarkTaskDoneRequest;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
 use App\Http\Resources\TaskResource;
@@ -20,7 +21,6 @@ class TaskController extends Controller
             $query->where('status', $status);
         }
 
-        // PAGINATION 10 per halaman
         $tasks = $query->orderByDesc('created_at')->paginate(10);
 
         return response()->json([
@@ -93,7 +93,7 @@ class TaskController extends Controller
     }
 
     // PATCH /api/tasks/{id}/done
-    public function markDone(Request $request, int $id): JsonResponse
+    public function markDone(MarkTaskDoneRequest $request, int $id): JsonResponse
     {
         $task = Task::where('user_id', $request->user()->id)->findOrFail($id);
         $task->status = 'done';

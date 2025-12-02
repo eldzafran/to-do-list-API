@@ -1,59 +1,95 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# ToDo List API – Laravel + Sanctum
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Project ini adalah REST API sederhana untuk mengelola to-do list per user.  
+Fokusnya: autentikasi pakai token (Laravel Sanctum), setiap user hanya bisa mengakses task miliknya sendiri, ada endpoint publik, dan struktur response JSON dibuat konsisten sesuai panduan GitBook.
 
-## About Laravel
+API ini tidak punya frontend. Pengujian dilakukan lewat Thunder Client / Postman.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Deskripsi Singkat
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Fitur utama:
 
-## Learning Laravel
+- Register & login user dengan Laravel Sanctum
+- CRUD task per user (create, read, update, delete)
+- Filter task berdasarkan status (`pending` / `done`)
+- Endpoint publik untuk melihat task yang bertanda `is_public`
+- Pagination di list task
+- Global error handling untuk semua route `api/*`
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+Struktur data:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- `users`
+- `tasks` (id, user_id, title, description, status, due_date, timestamps)
 
-## Laravel Sponsors
+---
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## Kesesuaian dengan GitBook
 
-### Premium Partners
+Project ini mengikuti poin-poin GitBook berikut:
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+1. **Authentication (Wajib)**
+   - Menggunakan **Laravel Sanctum**.
+   - Endpoint:
+     - `POST /api/register`
+     - `POST /api/login`
+     - `POST /api/logout`
+   - Setelah login / register, API mengembalikan token dan data user.
 
-## Contributing
+2. **Guest Mode / Public Endpoint (Wajib)**
+   - Endpoint tanpa auth:
+     - `GET /api/public/tasks` → list task publik (`is_public = true`).
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+3. **Form Request Class (Wajib)**
+   - Semua endpoint `POST / PUT / PATCH` menggunakan Form Request:
+     - `RegisterRequest` → register
+     - `LoginRequest` → login
+     - `LogoutRequest` → logout
+     - `StoreTaskRequest` → create task
+     - `UpdateTaskRequest` → update task
+     - `MarkTaskDoneRequest` → tandai task selesai
 
-## Code of Conduct
+4. **Resource Class / JsonResource (Wajib)**
+   - Tidak me-return model mentah.
+   - `UserResource` untuk data user.
+   - `TaskResource` untuk semua response task (list, detail, create, update, dll).
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+5. **Routing & Middleware (Wajib)**
+   - Semua route API ada di `routes/api.php`.
+   - Endpoint yang butuh login dibungkus:
+     - `Route::middleware('auth:sanctum')->group(...)`
+   - Endpoint guest (register, login, public tasks) di luar group tersebut.
 
-## Security Vulnerabilities
+6. **Standard Response JSON (Wajib)**
+   - Pola response sukses:
+     - `message`: string
+     - `success`: boolean
+     - `data`: object / array
+   - Untuk list dengan pagination ada tambahan `meta`.
+   - Global error handling di `Handler` membuat error API tetap konsisten:
+     - `message`
+     - `success` = false
+     - `data` = null
+     - `errors` (opsional, misalnya untuk validasi).
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+7. **ToDo-List API Behavior (Wajib)**
+   - Endpoint:
+     - `GET /api/tasks` → list task user, bisa filter `?status=pending/done`
+     - `POST /api/tasks` → create task
+     - `GET /api/tasks/{id}` → detail task user
+     - `PUT/PATCH /api/tasks/{id}` → update
+     - `DELETE /api/tasks/{id}` → delete
+     - `PATCH /api/tasks/{id}/done` → tandai selesai (optional di GitBook, di project ini ada)
+   - Setiap query task selalu dibatasi `where('user_id', user_login_id)` supaya user tidak bisa mengakses task milik orang lain.
 
-## License
+8. **Bonus GitBook**
+   - **Pagination**:
+     - `GET /api/tasks` dan `GET /api/public/tasks` memakai `paginate(10)` dan mengembalikan `meta`.
+   - **Error handling**:
+     - Response error API sudah distandarkan lewat custom `Handler`.
+   - **README**:
+     - File ini menjadi dokumentasi singkat project seperti yang disarankan GitBook.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+---
+
