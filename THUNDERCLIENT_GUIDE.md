@@ -4,7 +4,7 @@ Base URL yang digunakan:
 - http://127.0.0.1:9000/api/...
 
 Pastikan server Laravel sedang berjalan dengan perintah:
-- php artisan serve --host=127.0.0.1 --port=9000
+- php artisan serve --host=127.0.0.1 --port=8000
 
 Secara umum, di setiap request di Thunder Client:
 - Pilih method (GET / POST / PUT / PATCH / DELETE)
@@ -19,7 +19,7 @@ Secara umum, di setiap request di Thunder Client:
 Tujuan: membuat akun user baru.
 
 - Method: POST  
-- URL: http://127.0.0.1:9000/api/register  
+- URL: http://127.0.0.1:8000/api/register  
 - Auth: None  
 - Headers:
   - Content-Type: application/json  
@@ -45,7 +45,7 @@ Respon yang diharapkan:
 Tujuan: mendapatkan token untuk digunakan di endpoint yang butuh auth.
 
 - Method: POST  
-- URL: http://127.0.0.1:9000/api/login  
+- URL: http://127.0.0.1:8000/api/login  
 - Auth: None  
 - Headers:
   - Content-Type: application/json  
@@ -84,7 +84,7 @@ Jika token salah atau kosong, respon akan berupa error 401 (Unauthenticated).
 Tujuan: melihat semua task milik user yang sedang login.
 
 - Method: GET  
-- URL: http://127.0.0.1:9000/api/tasks  
+- URL: http://127.0.0.1:8000/api/tasks  
 - Auth: Bearer Token  
 - Body: kosong  
 
@@ -93,7 +93,7 @@ Opsional query:
 - page=1 (untuk pagination)
 
 Contoh:
-- http://127.0.0.1:9000/api/tasks?status=pending&page=1
+- http://127.0.0.1:8000/api/tasks?status=pending&page=1
 
 Respon berisi:
 - message: "List tasks"
@@ -108,7 +108,7 @@ Respon berisi:
 Tujuan: menambah task baru untuk user login.
 
 - Method: POST  
-- URL: http://127.0.0.1:9000/api/tasks  
+- URL: http://127.0.0.1:8000/api/tasks  
 - Auth: Bearer Token  
 - Headers:
   - Content-Type: application/json  
@@ -139,7 +139,7 @@ Simpan nilai id task untuk pengujian detail, edit, dan delete.
 Tujuan: melihat detail satu task tertentu milik user.
 
 - Method: GET  
-- URL: http://127.0.0.1:9000/api/tasks/{id}  
+- URL: http://127.0.0.1:8000/api/tasks/{id}  
   (ganti {id} dengan id task yang valid, misalnya 3)  
 - Auth: Bearer Token  
 - Body: kosong  
@@ -160,7 +160,7 @@ Tujuan: mengubah data task.
 A. Contoh menggunakan PUT (biasanya mengirim field lebih lengkap):
 
 - Method: PUT  
-- URL: http://127.0.0.1:9000/api/tasks/{id}  
+- URL: http://127.0.0.1:8000/api/tasks/{id}  
 - Auth: Bearer Token  
 - Headers:
   - Content-Type: application/json  
@@ -177,7 +177,7 @@ A. Contoh menggunakan PUT (biasanya mengirim field lebih lengkap):
 B. Contoh menggunakan PATCH (partial update):
 
 - Method: PATCH  
-- URL: http://127.0.0.1:9000/api/tasks/{id}  
+- URL: http://127.0.0.1:8000/api/tasks/{id}  
 - Auth: Bearer Token  
 - Headers:
   - Content-Type: application/json  
@@ -199,7 +199,7 @@ Respon (baik PUT maupun PATCH) berisi:
 Jika endpoint ini diaktifkan di project, fungsinya untuk langsung mengubah status task menjadi done.
 
 - Method: PATCH  
-- URL: http://127.0.0.1:9000/api/tasks/{id}/done  
+- URL: http://127.0.0.1:8000/api/tasks/{id}/done  
 - Auth: Bearer Token  
 - Body: kosong  
 
@@ -215,7 +215,7 @@ Respon berisi:
 Tujuan: menghapus task milik user.
 
 - Method: DELETE  
-- URL: http://127.0.0.1:9000/api/tasks/{id}  
+- URL: http://127.0.0.1:8000/api/tasks/{id}  
 - Auth: Bearer Token  
 - Body: kosong  
 
@@ -233,7 +233,7 @@ Jika setelah itu dipanggil kembali GET /api/tasks/{id}, maka harusnya mendapatka
 Tujuan: menghapus token yang sedang aktif.
 
 - Method: POST  
-- URL: http://127.0.0.1:9000/api/logout  
+- URL: http://127.0.0.1:8000/api/logout  
 - Auth: Bearer Token  
 - Body: kosong  
 
@@ -250,3 +250,4 @@ Dengan mengikuti urutan:
 - register → login → set token → list task → create task → detail → update → (optional: mark done) → delete → logout,
 
 seluruh flow utama API dapat diuji secara lengkap menggunakan Thunder Client.
+ 
