@@ -11,7 +11,6 @@ function App() {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // 🔥 ambil token dari localStorage saat pertama load
   useEffect(() => {
     const savedToken = localStorage.getItem('token');
     if (savedToken) {
@@ -21,7 +20,6 @@ function App() {
     setLoading(false);
   }, []);
 
-  // fetch task setelah token ada
   useEffect(() => {
     if (token) fetchTasks();
   }, [token]);

@@ -34,83 +34,90 @@ function TaskForm({ setTasks }) {
 
   return (
     <form onSubmit={submit} style={styles.form}>
-      <div style={styles.inputGroup}>
-        <div style={styles.inputIcon}>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20Z" fill="#2563cf"/>
-            <path d="M11 7H13V11H17V13H13V17H11V13H7V11H11V7Z" fill="#2563cf"/>
+      <div style={styles.formHeader}>
+        <h3 style={styles.formTitle}>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={styles.titleIcon}>
+            <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20Z" fill="#2563eb"/>
+            <path d="M11 7H13V11H17V13H13V17H11V13H7V11H11V7Z" fill="#2563eb"/>
           </svg>
-        </div>
+          Add New Task
+        </h3>
+      </div>
+
+      <div style={styles.field}>
+        <label style={styles.label}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={styles.fieldIcon}>
+            <path d="M14 2H6C4.9 2 4 2.9 4 4V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V8L14 2ZM18 20H6V4H13V9H18V20Z" fill="#2563eb"/>
+          </svg>
+          Task Title *
+        </label>
         <input
           style={styles.input}
-          placeholder="Task title"
+          placeholder="What needs to be done?"
           value={title}
           onChange={e => setTitle(e.target.value)}
           required
+          disabled={isSubmitting}
         />
       </div>
 
-      <div style={styles.inputGroup}>
-        <div style={styles.inputIcon}>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M19 5V19H5V5H19ZM19 3H5C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3Z" fill="#2563cf"/>
-            <path d="M14 17H7V15H14V17ZM17 13H7V11H17V13ZM17 9H7V7H17V9Z" fill="#2563cf"/>
+      <div style={styles.field}>
+        <label style={styles.label}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={styles.fieldIcon}>
+            <path d="M14 2H6C4.9 2 4 2.9 4 4V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V8L14 2ZM18 20H6V4H13V9H18V20ZM16 11H8V9H16V11ZM16 15H8V13H16V15ZM16 19H8V17H16V19Z" fill="#2563eb"/>
           </svg>
-        </div>
+          Description <span style={styles.optional}>(optional)</span>
+        </label>
         <textarea
           style={styles.textarea}
-          placeholder="Add description (optional)"
+          placeholder="Add any details or notes about this task..."
           value={description}
           onChange={e => setDescription(e.target.value)}
           rows="3"
+          disabled={isSubmitting}
         />
       </div>
 
       <div style={styles.row}>
-        <div style={styles.inputGroup}>
-          <div style={styles.inputIcon}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M19 4H18V2H16V4H8V2H6V4H5C3.89 4 3 4.9 3 6V20C3 21.1 3.89 22 5 22H19C20.1 22 21 21.1 21 20V6C21 4.9 20.1 4 19 4ZM19 20H5V10H19V20ZM5 8V6H19V8H5Z" fill="#2563cf"/>
+        <div style={styles.field}>
+          <label style={styles.label}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={styles.fieldIcon}>
+              <path d="M19 4H18V2H16V4H8V2H6V4H5C3.89 4 3 4.9 3 6V20C3 21.1 3.89 22 5 22H19C20.1 22 21 21.1 21 20V6C21 4.9 20.1 4 19 4ZM19 20H5V10H19V20ZM5 8V6H19V8H5Z" fill="#2563eb"/>
             </svg>
+            Due Date
+          </label>
+          <div style={styles.dateContainer}>
+            <input
+              type="date"
+              value={dueDate}
+              onChange={e => setDueDate(e.target.value)}
+              style={styles.dateInput}
+              disabled={isSubmitting}
+            />
           </div>
-          <input
-            type="date"
-            value={dueDate}
-            onChange={e => setDueDate(e.target.value)}
-            style={styles.date}
-          />
         </div>
         
-        <button 
-          style={isSubmitting ? {...styles.button, ...styles.buttonSubmitting} : styles.button}
-          disabled={isSubmitting}
-        >
-          <span style={styles.buttonContent}>
+        <div style={styles.buttonContainer}>
+          <button 
+            style={isSubmitting ? { ...styles.button, ...styles.buttonLoading } : styles.button}
+            disabled={isSubmitting}
+            type="submit"
+          >
             {isSubmitting ? (
-              <>
-                <svg style={styles.spinner} width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" strokeLinecap="round" stroke="url(#gradient)" opacity="0.3"/>
-                  <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22" stroke="currentColor" strokeWidth="4" strokeLinecap="round"/>
-                  <defs>
-                    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor="#ffffff" stopOpacity="0.5"/>
-                      <stop offset="100%" stopColor="#ffffff" stopOpacity="1"/>
-                    </linearGradient>
-                  </defs>
-                </svg>
+              <span style={styles.buttonContent}>
+                <span style={styles.spinner}></span>
                 Adding...
-              </>
+              </span>
             ) : (
-              <>
+              <span style={styles.buttonContent}>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={styles.buttonIcon}>
-                  <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20Z" fill="white"/>
-                  <path d="M11 7H13V11H17V13H13V17H11V13H7V11H11V7Z" fill="white"/>
+                  <path d="M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z" fill="currentColor"/>
                 </svg>
                 Add Task
-              </>
+              </span>
             )}
-          </span>
-        </button>
+          </button>
+        </div>
       </div>
     </form>
   );
@@ -120,158 +127,163 @@ const styles = {
   form: {
     display: 'flex',
     flexDirection: 'column',
-    gap: '20px',
-    marginBottom: '40px',
-    padding: '30px',
-    background: '#ffffff',
-    borderRadius: '18px',
-    border: '1px solid #f1f5ff',
-    boxShadow: '0 8px 24px rgba(37, 99, 207, 0.06)'
+    gap: 24,
+    padding: 32,
+    fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
   },
-  inputGroup: {
-    position: 'relative',
-    display: 'flex',
-    alignItems: 'center'
+  
+  formHeader: {
+    marginBottom: 8,
   },
-  inputIcon: {
-    position: 'absolute',
-    left: '16px',
-    zIndex: 1,
+  
+  formTitle: {
+    margin: 0,
+    fontSize: 18,
+    fontWeight: 600,
+    color: '#1e293b',
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center'
+    gap: 10,
   },
+  
+  titleIcon: {
+    flexShrink: 0,
+  },
+  
+  field: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 8,
+  },
+  
+  label: {
+    fontSize: 14,
+    fontWeight: 500,
+    color: '#334155',
+    display: 'flex',
+    alignItems: 'center',
+    gap: 8,
+  },
+  
+  fieldIcon: {
+    flexShrink: 0,
+  },
+  
+  optional: {
+    fontSize: 12,
+    color: '#94a3b8',
+    fontWeight: 400,
+    marginLeft: 4,
+  },
+  
   input: {
-    flex: 1,
-    padding: '16px 16px 16px 48px',
-    borderRadius: '14px',
-    border: '2px solid #eef2ff',
-    fontSize: '15px',
-    fontWeight: '500',
-    color: '#1e293b',
-    background: '#ffffff',
-    transition: 'all 0.3s ease',
+    padding: '14px 16px',
+    borderRadius: 12,
+    border: '1.5px solid #e2e8f0',
+    fontSize: 15,
     outline: 'none',
-    boxSizing: 'border-box',
-    fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif"
+    transition: 'all 0.2s ease',
+    backgroundColor: '#f8fafc',
+    color: '#0f172a',
+    fontFamily: 'inherit',
   },
+  
   textarea: {
-    flex: 1,
-    padding: '16px 16px 16px 48px',
-    borderRadius: '14px',
-    border: '2px solid #eef2ff',
-    fontSize: '15px',
-    fontWeight: '500',
-    color: '#1e293b',
-    background: '#ffffff',
-    transition: 'all 0.3s ease',
+    padding: '14px 16px',
+    borderRadius: 12,
+    border: '1.5px solid #e2e8f0',
+    fontSize: 15,
     outline: 'none',
-    resize: 'none',
-    fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
-    minHeight: '100px',
-    boxSizing: 'border-box'
+    transition: 'all 0.2s ease',
+    backgroundColor: '#f8fafc',
+    color: '#0f172a',
+    fontFamily: 'inherit',
+    resize: 'vertical',
+    minHeight: 100,
   },
+  
   row: {
     display: 'flex',
-    gap: '16px',
-    alignItems: 'center'
+    gap: 16,
+    alignItems: 'flex-end',
   },
-  date: {
+  
+  dateContainer: {
+    position: 'relative',
+    display: 'flex',
+    alignItems: 'center',
+  },
+  
+  dateInput: {
     flex: 1,
-    padding: '16px 16px 16px 48px',
-    borderRadius: '14px',
-    border: '2px solid #eef2ff',
-    fontSize: '15px',
-    fontWeight: '500',
-    color: '#1e293b',
-    background: '#ffffff',
-    transition: 'all 0.3s ease',
+    padding: '14px 16px',
+    borderRadius: 12,
+    border: '1.5px solid #e2e8f0',
+    fontSize: 15,
     outline: 'none',
-    fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
-    boxSizing: 'border-box'
+    transition: 'all 0.2s ease',
+    backgroundColor: '#f8fafc',
+    color: '#0f172a',
+    fontFamily: 'inherit',
   },
+  
+  buttonContainer: {
+    marginBottom: 8,
+  },
+  
   button: {
-    background: 'linear-gradient(135deg, #2563cf 0%, #3b82f6 100%)',
+    background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
     color: '#ffffff',
     border: 'none',
-    padding: '16px 32px',
-    borderRadius: '14px',
+    padding: '14px 28px',
+    borderRadius: 12,
+    fontSize: 15,
+    fontWeight: 600,
     cursor: 'pointer',
-    fontSize: '15px',
-    fontWeight: '600',
-    transition: 'all 0.3s ease',
-    minWidth: '140px',
-    boxShadow: '0 6px 20px rgba(37, 99, 207, 0.2)',
+    transition: 'all 0.2s ease',
+    boxShadow: '0 4px 12px rgba(37, 99, 235, 0.2)',
+    letterSpacing: '0.01em',
+    minWidth: 140,
+    height: 48,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    position: 'relative',
-    overflow: 'hidden',
-    fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif"
   },
-  buttonSubmitting: {
-    opacity: '0.8',
-    cursor: 'not-allowed'
+  
+  buttonLoading: {
+    opacity: 0.8,
+    cursor: 'not-allowed',
   },
+  
   buttonContent: {
     display: 'flex',
     alignItems: 'center',
-    gap: '8px'
+    justifyContent: 'center',
+    gap: 8,
   },
+  
   buttonIcon: {
-    transition: 'transform 0.3s ease'
+    flexShrink: 0,
   },
+  
   spinner: {
-    animation: 'spin 1s linear infinite'
-  }
+    width: 18,
+    height: 18,
+    border: '2px solid rgba(255, 255, 255, 0.3)',
+    borderTopColor: '#ffffff',
+    borderRadius: '50%',
+    animation: 'spin 1s linear infinite',
+  },
 };
 
-// Menambahkan efek hover dan focus untuk input
-const addFormStyles = `
-  input:focus, textarea:focus, input[type="date"]:focus {
-    border-color: #2563cf;
-    box-shadow: 0 0 0 3px rgba(37, 99, 207, 0.1);
-  }
-  
-  input:hover, textarea:hover, input[type="date"]:hover {
-    border-color: #c7d2fe;
-  }
-  
-  button:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(37, 99, 207, 0.25);
-  }
-  
-  button:active:not(:disabled) {
-    transform: translateY(0);
-  }
-  
+// animasi spinner
+const styleSheet = document.styleSheets[0];
+styleSheet.insertRule(`
   @keyframes spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
   }
-  
-  ::placeholder {
-    color: #94a3b8;
-    font-weight: 400;
-  }
-  
-  /* Style untuk date picker icon */
-  input[type="date"]::-webkit-calendar-picker-indicator {
-    cursor: pointer;
-    opacity: 0;
-    position: absolute;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-`;
+`, styleSheet.cssRules.length);
 
-// Menambahkan styles ke document
-if (typeof document !== 'undefined') {
-  const styleElement = document.createElement('style');
-  styleElement.textContent = addFormStyles;
-  document.head.appendChild(styleElement);
-}
 
 export default TaskForm;

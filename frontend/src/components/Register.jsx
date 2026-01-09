@@ -17,7 +17,7 @@ function Register({ onRegister }) {
     setError('');
     setSuccess('');
     
-    // Validasi password
+    // Validasi pw
     if (password !== confirmPassword) {
       setError('Passwords do not match');
       return;
@@ -44,7 +44,6 @@ function Register({ onRegister }) {
       
       setSuccess('Registration successful! Redirecting...');
       
-      // Redirect setelah 1.5 detik
       setTimeout(() => {
         navigate('/dashboard');
       }, 1500);
@@ -59,7 +58,7 @@ function Register({ onRegister }) {
   return (
     <div style={styles.page}>
       <div style={styles.container}>
-        {/* Decorative elements - sama dengan login */}
+        {/* dekorasi buletan */}
         <div style={styles.decorativeCircle1}></div>
         <div style={styles.decorativeCircle2}></div>
         
@@ -80,7 +79,7 @@ function Register({ onRegister }) {
           </div>
 
           <div style={styles.formGroup}>
-            {/* Error Alert */}
+            {/* notif error  */}
             {error && (
               <div style={styles.errorAlert}>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={styles.errorIcon}>
@@ -90,7 +89,7 @@ function Register({ onRegister }) {
               </div>
             )}
 
-            {/* Success Alert */}
+            {/* notif sukses */}
             {success && (
               <div style={styles.successAlert}>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={styles.successIcon}>
@@ -100,7 +99,7 @@ function Register({ onRegister }) {
               </div>
             )}
 
-            {/* Name Field */}
+            {/* nama */}
             <div style={styles.field}>
               <label style={styles.label}>Full Name</label>
               <input
@@ -114,7 +113,7 @@ function Register({ onRegister }) {
               />
             </div>
 
-            {/* Email Field */}
+            {/* email */}
             <div style={styles.field}>
               <label style={styles.label}>Email Address</label>
               <input
@@ -128,7 +127,7 @@ function Register({ onRegister }) {
               />
             </div>
 
-            {/* Password Field */}
+            {/* pw */}
             <div style={styles.field}>
               <label style={styles.label}>Password</label>
               <input
@@ -142,7 +141,7 @@ function Register({ onRegister }) {
               />
             </div>
 
-            {/* Confirm Password Field */}
+            {/* condirm pw*/}
             <div style={styles.field}>
               <label style={styles.label}>Confirm Password</label>
               <input
@@ -408,49 +407,5 @@ styleSheet.insertRule(`
     100% { transform: rotate(360deg); }
   }
 `, styleSheet.cssRules.length);
-
-// Add hover effects
-styleSheet.insertRule(`
-  .register-input:focus {
-    border-color: #2563eb !important;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1) !important;
-    background-color: white !important;
-  }
-`, styleSheet.cssRules.length);
-
-styleSheet.insertRule(`
-  .register-button:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.25) !important;
-  }
-`, styleSheet.cssRules.length);
-
-styleSheet.insertRule(`
-  .register-link:hover {
-    color: #1d4ed8 !important;
-  }
-`, styleSheet.cssRules.length);
-
-// Apply the class names for hover effects
-Object.assign(styles.input, { 
-  ':focus': { 
-    borderColor: '#2563eb', 
-    boxShadow: '0 0 0 3px rgba(37, 99, 235, 0.1)', 
-    backgroundColor: 'white' 
-  } 
-});
-
-Object.assign(styles.button, { 
-  ':hover': { 
-    transform: 'translateY(-1px)', 
-    boxShadow: '0 6px 16px rgba(37, 99, 235, 0.25)' 
-  } 
-});
-
-Object.assign(styles.link, { 
-  ':hover': { 
-    color: '#1d4ed8' 
-  } 
-});
 
 export default Register;
